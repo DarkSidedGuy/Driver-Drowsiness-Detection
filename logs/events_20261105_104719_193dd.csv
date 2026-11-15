@@ -1,0 +1,10 @@
+time,type,message,value
+2026-11-05T10:47:19,System,Monitoring session started,
+2026-11-05T10:47:22,Blink,Eye closure cycle completed,0.506
+2026-11-05T10:47:35,Blink,Eye closure cycle completed,1.594
+2026-11-05T10:47:38,Blink,Eye closure cycle completed,0.35
+2026-11-05T10:47:42,Blink,Eye closure cycle completed,0.567
+2026-11-05T10:47:43,Blink,Eye closure cycle completed,0.778
+2026-11-05T10:47:44,Yawn,Possible yawn detected,0.671
+2026-11-05T10:48:00,Blink,Eye closure cycle completed,2.013
+2026-11-05T10:48:04,System,Monitoring session stopped,

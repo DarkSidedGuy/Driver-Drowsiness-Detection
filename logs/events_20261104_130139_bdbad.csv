@@ -1,0 +1,7 @@
+time,type,message,value
+2026-11-04T13:01:42,System,Monitoring session started,
+2026-11-04T13:01:45,Yawn,Possible yawn detected,0.755
+2026-11-04T13:01:55,Yawn,Possible yawn detected,0.568
+2026-11-04T13:02:08,Drowsiness,Prolonged eye closure detected,2.062
+2026-11-04T13:02:09,Yawn,Possible yawn detected,0.974
+2026-11-04T13:02:18,System,Monitoring session stopped,

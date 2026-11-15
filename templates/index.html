@@ -1,0 +1,574 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>DriverSense | Drowsiness Monitoring</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+
+<div class="app-shell">
+
+    <!-- SIDEBAR -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            <div class="brand-mark">DS</div>
+
+            <div>
+                <strong>DriverSense</strong>
+                <span>VISION MONITOR</span>
+            </div>
+        </div>
+
+        <div class="nav-label">WORKSPACE</div>
+
+        <a class="nav-item active" href="#overview">
+            <span>▦</span> Overview
+        </a>
+
+        <a class="nav-item" href="#live">
+            <span>◉</span> Live monitoring
+        </a>
+
+        <a class="nav-item" href="#analytics">
+            <span>⌁</span> Analytics
+        </a>
+
+        <a class="nav-item" href="#history">
+            <span>▤</span> Session history
+        </a>
+
+        <div class="sidebar-bottom">
+
+            <div class="system-card">
+                <span class="pulse-dot"></span>
+
+                <div>
+                    <b>System ready</b>
+                    <small>Local processing enabled</small>
+                </div>
+            </div>
+
+            <small class="version">DRIVERSENSE · v3.1</small>
+
+        </div>
+
+    </aside>
+
+
+    <!-- MAIN CONTENT -->
+
+    <main class="main-content" id="overview">
+
+        <header class="topbar">
+
+            <div>
+                <div class="eyebrow">COMPUTER VISION PROJECT</div>
+
+                <h1>Monitoring overview</h1>
+
+                <p class="subheading">
+                    Real-time driver attention and fatigue analytics.
+                </p>
+            </div>
+
+            <div class="topbar-right">
+
+                <div class="date-chip" id="todayLabel">—</div>
+
+                <div class="avatar">DS</div>
+
+            </div>
+
+        </header>
+
+
+        <!-- SYSTEM STATUS -->
+
+        <section class="status-banner" id="statusBanner">
+
+            <div class="status-icon">◉</div>
+
+            <div class="status-copy">
+
+                <b id="statusTitle">System idle</b>
+
+                <span id="statusMessage">
+                    Start a monitoring session when you are ready.
+                </span>
+
+            </div>
+
+            <span class="status-pill idle" id="statusPill">
+                IDLE
+            </span>
+
+        </section>
+
+
+        <!-- METRIC CARDS -->
+
+        <section class="metric-grid">
+
+            <article class="metric-card">
+
+                <div class="metric-top">
+                    <span>Eye aspect ratio</span>
+                    <span class="metric-icon cyan">◉</span>
+                </div>
+
+                <div class="metric-value" id="earValue">—</div>
+
+                <div class="metric-foot">
+                    EAR threshold <b>0.23</b>
+                </div>
+
+            </article>
+
+
+            <article class="metric-card">
+
+                <div class="metric-top">
+                    <span>Mouth aspect ratio</span>
+                    <span class="metric-icon violet">◌</span>
+                </div>
+
+                <div class="metric-value" id="marValue">—</div>
+
+                <div class="metric-foot">
+                    Yawn threshold <b>0.55</b>
+                </div>
+
+            </article>
+
+
+            <article class="metric-card">
+
+                <div class="metric-top">
+                    <span>PERCLOS</span>
+                    <span class="metric-icon amber">◷</span>
+                </div>
+
+                <div class="metric-value" id="perclosValue">
+                    —<small>%</small>
+                </div>
+
+                <div class="metric-foot">
+                    Rolling 60-second window
+                </div>
+
+            </article>
+
+
+            <article class="metric-card">
+
+                <div class="metric-top">
+                    <span>Session duration</span>
+                    <span class="metric-icon green">◴</span>
+                </div>
+
+                <div class="metric-value" id="durationValue">
+                    00:00
+                </div>
+
+                <div class="metric-foot">
+                    Current monitoring session
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- CAMERA AND DETECTION -->
+
+        <section class="content-grid" id="live">
+
+            <article class="panel camera-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <div class="eyebrow">LIVE FEED</div>
+                        <h2>Camera monitoring</h2>
+                    </div>
+
+                    <span class="live-tag">
+                        <i></i> LIVE
+                    </span>
+
+                </div>
+
+
+                <div class="camera-wrap">
+
+                    <img id="cameraFeed" alt="Live camera feed">
+
+                    <div class="camera-placeholder" id="cameraPlaceholder">
+
+                        <div class="camera-symbol">⌁</div>
+
+                        <b>Camera feed is inactive</b>
+
+                        <span>
+                            Start monitoring to activate the webcam.
+                        </span>
+
+                    </div>
+
+                    <div class="camera-overlay" id="cameraOverlay">
+                        WAITING FOR CAMERA
+                    </div>
+
+                </div>
+
+
+                <div class="camera-controls">
+
+                    <div class="button-group">
+
+                        <button class="btn btn-primary" id="startBtn">
+                            ▶ Start monitoring
+                        </button>
+
+                        <button class="btn btn-danger" id="stopBtn" disabled>
+                            ■ Stop
+                        </button>
+
+                    </div>
+
+                    <span class="camera-hint">
+                        Camera access is handled locally.
+                    </span>
+
+                </div>
+
+            </article>
+
+
+            <!-- DETECTION OUTPUT -->
+
+            <article class="panel detection-panel">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <div class="eyebrow">DETECTION OUTPUT</div>
+                        <h2>Attention indicators</h2>
+                    </div>
+
+                    <span class="face-state" id="faceState">
+                        NO FACE
+                    </span>
+
+                </div>
+
+
+                <div class="indicator-row">
+
+                    <div class="indicator-symbol eye">◉</div>
+
+                    <div class="indicator-info">
+                        <b>Eye closure</b>
+                        <span>EAR-based detection</span>
+                    </div>
+
+                    <strong id="eyeState">Waiting</strong>
+
+                </div>
+
+
+                <div class="indicator-row">
+
+                    <div class="indicator-symbol eye">↕</div>
+
+                    <div class="indicator-info">
+                        <b>Current closure</b>
+                        <span>Continuous eye-closed duration</span>
+                    </div>
+
+                    <strong id="currentClosure">0.00s</strong>
+
+                </div>
+
+
+                <div class="indicator-row">
+
+                    <div class="indicator-symbol eye">↻</div>
+
+                    <div class="indicator-info">
+                        <b>Blink frequency</b>
+                        <span>Completed blinks in last 60 seconds</span>
+                    </div>
+
+                    <strong id="blinkRate">0/min</strong>
+
+                </div>
+
+
+                <div class="indicator-row">
+
+                    <div class="indicator-symbol mouth">◌</div>
+
+                    <div class="indicator-info">
+                        <b>Possible yawning</b>
+                        <span>MAR-based heuristic</span>
+                    </div>
+
+                    <strong id="yawnState">Waiting</strong>
+
+                </div>
+
+
+                <div class="indicator-row">
+
+                    <div class="indicator-symbol alert">!</div>
+
+                    <div class="indicator-info">
+                        <b>Drowsiness events</b>
+                        <span>Prolonged eye closure</span>
+                    </div>
+
+                    <strong id="drowsyCount">0</strong>
+
+                </div>
+
+
+                <div class="indicator-row">
+
+                    <div class="indicator-symbol event">↗</div>
+
+                    <div class="indicator-info">
+                        <b>Possible yawns</b>
+                        <span>Detected in this session</span>
+                    </div>
+
+                    <strong id="yawnCount">0</strong>
+
+                </div>
+
+
+                <div class="indicator-row">
+
+                    <div class="indicator-symbol event">⌁</div>
+
+                    <div class="indicator-info">
+                        <b>Average blink duration</b>
+                        <span>Across completed closures</span>
+                    </div>
+
+                    <strong id="avgBlink">0.00s</strong>
+
+                </div>
+
+
+                <div class="alert-box" id="alertBox">
+
+                    <b>Safety status</b>
+
+                    <span>
+                        No active alert. This prototype is for educational demonstration only.
+                    </span>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- ANALYTICS -->
+
+        <section class="panel analytics-panel" id="analytics">
+
+            <div class="panel-heading">
+
+                <div>
+                    <div class="eyebrow">SESSION TELEMETRY</div>
+
+                    <h2>Live analytics</h2>
+
+                    <p class="panel-subtitle">
+                        Values are sampled approximately once per second.
+                    </p>
+                </div>
+
+                <span class="chart-legend">
+                    <i class="legend-ear"></i> EAR
+                    <i class="legend-mar"></i> MAR
+                    <i class="legend-perclos"></i> PERCLOS
+                </span>
+
+            </div>
+
+
+            <div class="chart-wrap">
+                <canvas id="trendChart"></canvas>
+            </div>
+
+
+            <div class="analytics-foot">
+
+                <div>
+                    <span>Peak PERCLOS</span>
+                    <b id="maxPerclos">0.0%</b>
+                </div>
+
+                <div>
+                    <span>Valid monitoring</span>
+                    <b id="validTime">0 sec</b>
+                </div>
+
+                <div>
+                    <span>Total drowsy time</span>
+                    <b id="drowsyDuration">0 sec</b>
+                </div>
+
+                <div>
+                    <span>Longest eye closure</span>
+                    <b id="longestClosure">0.00 sec</b>
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- EVENTS AND HISTORY -->
+
+        <section class="lower-grid">
+
+            <article class="panel" id="events">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <div class="eyebrow">ACTIVITY LOG</div>
+                        <h2>Recent events</h2>
+                    </div>
+
+                    <span class="count-badge" id="eventCount">0</span>
+
+                </div>
+
+                <div class="event-list" id="eventList">
+                    <div class="empty-state">
+                        No events recorded yet.
+                    </div>
+                </div>
+
+            </article>
+
+
+            <article class="panel" id="history">
+
+                <div class="panel-heading">
+
+                    <div>
+                        <div class="eyebrow">PAST SESSIONS</div>
+                        <h2>Session history</h2>
+                    </div>
+
+                    <button class="text-button" id="refreshHistory">
+                        Refresh ↻
+                    </button>
+
+                </div>
+
+
+                <div class="history-table-wrap">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+                                <th>Date</th>
+                                <th>Events</th>
+                                <th>Yawns</th>
+                                <th>Peak PERCLOS</th>
+                                <th>Report</th>
+                            </tr>
+
+                        </thead>
+
+                        <tbody id="historyBody">
+
+                            <tr>
+                                <td colspan="5" class="empty-cell">
+                                    No saved sessions yet.
+                                </td>
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            </article>
+
+        </section>
+
+
+        <!-- EXPORT -->
+
+        <section class="export-bar">
+
+            <div>
+                <b>Export session data</b>
+
+                <span>
+                    Download your session summary, event log or formatted PDF report.
+                </span>
+            </div>
+
+            <div class="export-actions">
+
+                <button class="btn btn-secondary" id="downloadEvents">
+                    ↓ Event CSV
+                </button>
+
+                <button class="btn btn-secondary" id="downloadSummary">
+                    ↓ Summary CSV
+                </button>
+
+                <button class="btn btn-primary" id="downloadPdf" disabled>
+                    ↓ PDF report
+                </button>
+
+            </div>
+
+        </section>
+
+
+        <footer>
+            DriverSense is an educational computer-vision prototype.
+            It is not a certified driver monitoring, medical, or safety system.
+        </footer>
+
+    </main>
+
+</div>
+
+
+<div class="toast" id="toast"></div>
+
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
